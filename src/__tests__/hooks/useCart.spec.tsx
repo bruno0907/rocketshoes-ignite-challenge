@@ -38,7 +38,7 @@ describe('useCart Hook', () => {
       .spyOn(Storage.prototype, 'getItem')
       .mockReturnValueOnce(JSON.stringify(initialStoragedData));
   });
-
+  
   it('should be able to initialize cart with localStorage value', () => {
     const { result } = renderHook(useCart, {
       wrapper: CartProvider,
