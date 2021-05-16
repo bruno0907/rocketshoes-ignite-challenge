@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../services/api';
-import { Product } from '../types';
+import { Product, Stock } from '../types';
 
 interface CartProviderProps {
   children: ReactNode;
@@ -34,7 +34,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   const addProduct = async (productId: number) => {    
     try {  
-      const { data: stock } = await api.get(`/stock/${productId}`)      
+      const { data: stock } = await api.get<Stock>(`/stock/${productId}`)      
       if(!stock) return
 
       if(stock.amount <= 1) {
@@ -45,7 +45,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       const productInCart = cart.find(product => product.id === productId)   
 
       if(!productInCart){      
-        const { data: product } = await api.get(`/products/${productId}`) 
+        const { data: product } = await api.get<Product>(`/products/${productId}`) 
         if(!product) return     
 
         const newProduct = {
@@ -97,7 +97,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
       const { data: stock } = await api.get(`/stock/${productId}`)
       if(!stock) return
 
-      await api.put(`/stock/${productId}`, { amount: stock.amount + productInCart.amount })
+      await api.put<Stock>(`/stock/${productId}`, { amount: stock.amount + productInCart.amount })
       
       return
 
@@ -134,7 +134,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         setCart(increasedProductAmountCart)
         localStorage.setItem('@RocketShoes:cart', JSON.stringify(increasedProductAmountCart))
         
-        await api.put(`/stock/${productId}`, { amount: stock.amount - 1 })        
+        await api.put<Stock>(`/stock/${productId}`, { amount: stock.amount - 1 })        
   
         return
       }
@@ -152,7 +152,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
         let newAmount = stock.amount + 1
 
-        await api.put(`/stock/${productId}`, { amount: newAmount })
+        await api.put<Stock>(`/stock/${productId}`, { amount: newAmount })
 
         return
       } 
