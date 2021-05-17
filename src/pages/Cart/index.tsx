@@ -23,6 +23,7 @@ const Cart = (): JSX.Element => {
     priceFormatted: formatPrice(product.price),
     subTotal: formatPrice(product.price * product.amount)
   }))
+  
   const total = formatPrice(cart.reduce((sumTotal, product) => {
       sumTotal = sumTotal + (product.price * product.amount)
 
@@ -65,7 +66,7 @@ const Cart = (): JSX.Element => {
           { cartFormatted.map(product => 
             <tr data-testid="product" key={product.id}>
               <td>
-                <img src={product.image} alt="Tênis de Caminhada Leve Confortável" />
+                <img src={product.image} alt={product.title} />
               </td>
               <td>
                 <strong>{product.title}</strong>
